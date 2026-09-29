@@ -1,1 +1,946 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>[NOM DE LA PLATEFORME] — Veille réglementaire | Maquette GEEKDEV</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50:  '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+              950: '#0f172a',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            'card': '0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.03)',
+            'card-hover': '0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04)',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .view { display: none; }
+    .view.active { display: block; }
+    .fade-in { animation: fadeIn 0.35s ease-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
 
+  <!-- ==================== HEADER ==================== -->
+  <header id="main-header" class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <a href="#" onclick="showView('home'); return false;" class="flex items-center gap-2.5 group">
+          <div class="w-9 h-9 rounded-lg bg-primary-900 flex items-center justify-center shadow-sm group-hover:bg-primary-800 transition">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <span class="font-bold text-lg text-primary-950 tracking-tight hidden sm:inline">[NOM DE LA PLATEFORME]</span>
+          <span class="font-bold text-base text-primary-950 tracking-tight sm:hidden">[NOM]</span>
+        </a>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden lg:flex items-center gap-7">
+          <a href="#" onclick="showView('home'); return false;" class="text-sm font-medium text-slate-600 hover:text-primary-700 transition">Accueil</a>
+          <a href="#" onclick="showView('home'); scrollToSection('solution'); return false;" class="text-sm font-medium text-slate-600 hover:text-primary-700 transition">Notre solution</a>
+          <a href="#" onclick="showView('home'); scrollToSection('veille'); return false;" class="text-sm font-medium text-slate-600 hover:text-primary-700 transition">Veille réglementaire</a>
+          <a href="#" onclick="showView('home'); scrollToSection('offres'); return false;" class="text-sm font-medium text-slate-600 hover:text-primary-700 transition">Nos offres</a>
+          <a href="#" onclick="showView('home'); scrollToSection('fonctionnement'); return false;" class="text-sm font-medium text-slate-600 hover:text-primary-700 transition">Fonctionnement</a>
+          <a href="#" onclick="showView('home'); scrollToSection('contact'); return false;" class="text-sm font-medium text-slate-600 hover:text-primary-700 transition">Contact</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <button onclick="showView('home'); scrollToSection('offres');" class="hidden sm:inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 rounded-lg shadow-sm transition">
+            Découvrir nos offres
+          </button>
+          <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100" aria-label="Menu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 bg-white">
+      <div class="px-4 py-3 space-y-1">
+        <a href="#" onclick="showView('home'); closeMobile(); return false;" class="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">Accueil</a>
+        <a href="#" onclick="showView('home'); scrollToSection('solution'); closeMobile(); return false;" class="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">Notre solution</a>
+        <a href="#" onclick="showView('home'); scrollToSection('veille'); closeMobile(); return false;" class="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">Veille réglementaire</a>
+        <a href="#" onclick="showView('home'); scrollToSection('offres'); closeMobile(); return false;" class="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">Nos offres</a>
+        <a href="#" onclick="showView('home'); scrollToSection('fonctionnement'); closeMobile(); return false;" class="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">Fonctionnement</a>
+        <a href="#" onclick="showView('home'); scrollToSection('contact'); closeMobile(); return false;" class="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">Contact</a>
+        <button onclick="showView('home'); scrollToSection('offres'); closeMobile();" class="w-full mt-2 px-4 py-2.5 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 rounded-lg">
+          Découvrir nos offres
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== VIEWS ==================== -->
+
+  <!-- ========== VIEW: HOME ========== -->
+  <div id="view-home" class="view active">
+
+    <!-- HERO -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800 text-white">
+      <div class="absolute inset-0 opacity-15">
+        <div class="absolute top-16 right-20 w-80 h-80 bg-primary-400 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-10 left-16 w-96 h-96 bg-cyan-500 rounded-full blur-3xl opacity-40"></div>
+      </div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 lg:py-28">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div class="fade-in">
+            <p class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-primary-100 text-xs font-medium mb-6">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              Maquette de présentation — GEEKDEV · Septembre 2026
+            </p>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-5">
+              Anticipez les évolutions réglementaires qui concernent vos équipements.
+            </h1>
+            <p class="text-lg text-primary-100/90 max-w-xl mb-8 leading-relaxed">
+              Une solution de veille réglementaire pensée pour aider les entreprises à suivre les exigences applicables à leurs équipements et à mieux anticiper leurs besoins de conformité.
+            </p>
+            <div class="flex flex-wrap gap-3">
+              <button onclick="scrollToSection('solution')" class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold bg-white text-primary-900 hover:bg-primary-50 rounded-lg shadow-md transition">
+                Découvrir la solution
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+              </button>
+              <button onclick="scrollToSection('offres')" class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold border border-white/30 text-white hover:bg-white/10 rounded-lg transition">
+                Voir nos offres
+              </button>
+            </div>
+          </div>
+
+          <!-- Illustration abstraite conformité -->
+          <div class="relative hidden lg:block">
+            <div class="relative mx-auto w-full max-w-md">
+              <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-2xl">
+                <div class="flex items-center gap-3 mb-5">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-500/30 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                  </div>
+                  <div>
+                    <div class="h-2.5 w-28 bg-white/40 rounded-full"></div>
+                    <div class="h-2 w-20 bg-white/20 rounded-full mt-1.5"></div>
+                  </div>
+                </div>
+                <div class="space-y-2.5 mb-5">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                    <div class="h-2.5 bg-white/25 rounded-full flex-1"></div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-amber-400"></div>
+                    <div class="h-2.5 bg-white/20 rounded-full flex-1"></div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-white/30"></div>
+                    <div class="h-2.5 bg-white/15 rounded-full w-4/5"></div>
+                  </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2.5">
+                  <div class="h-14 rounded-xl bg-primary-500/25 border border-white/10 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                  </div>
+                  <div class="h-14 rounded-xl bg-cyan-500/20 border border-white/10 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                  </div>
+                  <div class="h-14 rounded-xl bg-emerald-500/20 border border-white/10 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                  </div>
+                </div>
+              </div>
+              <!-- Floating badge -->
+              <div class="absolute -top-5 -right-5 bg-white rounded-xl shadow-xl p-3.5 w-44">
+                <div class="flex items-center gap-2 mb-1.5">
+                  <div class="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                  </div>
+                  <span class="text-xs font-semibold text-slate-700">Conformité</span>
+                </div>
+                <div class="h-1.5 bg-slate-100 rounded-full"><div class="h-1.5 bg-emerald-500 rounded-full w-4/5"></div></div>
+              </div>
+              <div class="absolute -bottom-4 -left-5 bg-white rounded-xl shadow-xl p-3 w-40">
+                <div class="text-[10px] text-slate-500 mb-0.5 uppercase tracking-wide">Alertes suivies</div>
+                <div class="text-lg font-bold text-primary-900">24</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LE PROBLÈME -->
+    <section class="py-16 md:py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="text-2xl sm:text-3xl font-bold text-primary-950 mb-4">Les exigences réglementaires évoluent. Êtes-vous prêt à les suivre ?</h2>
+          <p class="text-slate-600 leading-relaxed">Les entreprises qui gèrent des équipements réglementés font face à des défis récurrents pour rester informées et anticiper les évolutions.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-primary-200 hover:shadow-card transition">
+            <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-4">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            </div>
+            <h3 class="font-semibold text-primary-950 mb-1.5 text-sm">Informations dispersées</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">Les informations réglementaires peuvent provenir de plusieurs sources difficiles à centraliser.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-primary-200 hover:shadow-card transition">
+            <div class="w-11 h-11 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center mb-4">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h3 class="font-semibold text-primary-950 mb-1.5 text-sm">Évolutions difficiles à suivre</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">Les changements peuvent être difficiles à identifier et à analyser en temps utile.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-primary-200 hover:shadow-card transition">
+            <div class="w-11 h-11 rounded-xl bg-red-50 text-red-500 flex items-center justify-center mb-4">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            </div>
+            <h3 class="font-semibold text-primary-950 mb-1.5 text-sm">Risque de non-conformité</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">Une entreprise peut avoir besoin d’identifier rapidement les exigences qui concernent ses équipements.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-primary-200 hover:shadow-card transition">
+            <div class="w-11 h-11 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center mb-4">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            </div>
+            <h3 class="font-semibold text-primary-950 mb-1.5 text-sm">Manque de visibilité</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">Les responsables peuvent avoir besoin d’une vision structurée des informations pertinentes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOTRE SOLUTION -->
+    <section id="solution" class="py-16 md:py-20 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="text-2xl sm:text-3xl font-bold text-primary-950 mb-4">Une veille réglementaire adaptée à votre activité</h2>
+          <p class="text-slate-600 leading-relaxed">La plateforme permettrait à une entreprise de communiquer des informations sur son activité et ses équipements afin d’identifier les besoins de veille réglementaire pertinents.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-card hover:shadow-card-hover transition">
+            <div class="w-12 h-12 rounded-xl bg-primary-100 text-primary-700 flex items-center justify-center mb-4">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </div>
+            <h3 class="font-semibold text-primary-950 mb-2">Identifier</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">Identifier les équipements et domaines concernés par des exigences réglementaires.</p>
+          </div>
+          <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-card hover:shadow-card-hover transition">
+            <div class="w-12 h-12 rounded-xl bg-primary-100 text-primary-700 flex items-center justify-center mb-4">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            </div>
+            <h3 class="font-semibold text-primary-950 mb-2">Suivre</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">Suivre les informations réglementaires pertinentes pour votre activité et vos équipements.</p>
+          </div>
+          <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-card hover:shadow-card-hover transition">
+            <div class="w-12 h-12 rounded-xl bg-primary-100 text-primary-700 flex items-center justify-center mb-4">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </div>
+            <h3 class="font-semibold text-primary-950 mb-2">Comprendre</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">Présenter les informations de manière structurée et compréhensible pour vos équipes.</p>
+          </div>
+          <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-card hover:shadow-card-hover transition">
+            <div class="w-12 h-12 rounded-xl bg-primary-100 text-primary-700 flex items-center justify-center mb-4">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+            </div>
+            <h3 class="font-semibold text-primary-950 mb-2">Anticiper</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">Permettre à l’entreprise de mieux anticiper les évolutions qui pourraient la concerner.</p>
+          </div>
+        </div>
+        <p class="text-center text-xs text-slate-400 mt-8">Ces éléments décrivent le fonctionnement envisagé du service, et non des fonctionnalités déjà opérationnelles.</p>
+      </div>
+    </section>
+
+    <!-- DOMAINES / ÉQUIPEMENTS -->
+    <section id="veille" class="py-16 md:py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="text-2xl sm:text-3xl font-bold text-primary-950 mb-4">Quels équipements sont concernés ?</h2>
+          <p class="text-slate-600">Exemples de catégories d’équipements pouvant entrer dans le périmètre d’une veille réglementaire. La liste définitive sera définie avec le client.</p>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div class="flex flex-col items-center text-center p-5 rounded-xl bg-slate-50 border border-slate-100 hover:border-primary-200 transition">
+            <div class="w-12 h-12 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center mb-3">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            </div>
+            <span class="text-xs font-medium text-slate-700">Équipements industriels</span>
+          </div>
+          <div class="flex flex-col items-center text-center p-5 rounded-xl bg-slate-50 border border-slate-100 hover:border-primary-200 transition">
+            <div class="w-12 h-12 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center mb-3">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <span class="text-xs font-medium text-slate-700">Équipements électriques</span>
+          </div>
+          <div class="flex flex-col items-center text-center p-5 rounded-xl bg-slate-50 border border-slate-100 hover:border-primary-200 transition">
+            <div class="w-12 h-12 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center mb-3">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <span class="text-xs font-medium text-slate-700">Équipements de sécurité</span>
+          </div>
+          <div class="flex flex-col items-center text-center p-5 rounded-xl bg-slate-50 border border-slate-100 hover:border-primary-200 transition">
+            <div class="w-12 h-12 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center mb-3">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <span class="text-xs font-medium text-slate-700">Installations techniques</span>
+          </div>
+          <div class="flex flex-col items-center text-center p-5 rounded-xl bg-slate-50 border border-slate-100 hover:border-primary-200 transition">
+            <div class="w-12 h-12 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center mb-3">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+            </div>
+            <span class="text-xs font-medium text-slate-700">Équipements de production</span>
+          </div>
+          <div class="flex flex-col items-center text-center p-5 rounded-xl bg-slate-50 border border-slate-100 hover:border-primary-200 transition">
+            <div class="w-12 h-12 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center mb-3">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+            </div>
+            <span class="text-xs font-medium text-slate-700">Autres équipements réglementés</span>
+          </div>
+        </div>
+        <p class="text-center text-xs text-slate-400 mt-6">La liste des équipements concernés dépendra du périmètre réglementaire défini avec le client. Aucune réglementation précise n’est inventée ici.</p>
+      </div>
+    </section>
+
+    <!-- INFORMATIONS SUIVIES -->
+    <section class="py-16 md:py-20 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="text-2xl sm:text-3xl font-bold text-primary-950 mb-4">Ce que votre veille peut couvrir</h2>
+          <p class="text-slate-600">Catégories d’informations envisagées. Les contenus réglementaires définitifs seront fournis et validés par le client.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div class="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-100 shadow-sm">
+            <div class="w-10 h-10 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-sm text-primary-950 mb-1">Évolutions réglementaires</h3>
+              <p class="text-xs text-slate-600">Suivi des évolutions susceptibles d’impacter vos équipements.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-100 shadow-sm">
+            <div class="w-10 h-10 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-sm text-primary-950 mb-1">Nouvelles exigences</h3>
+              <p class="text-xs text-slate-600">Identification de nouvelles exigences applicables à votre activité.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-100 shadow-sm">
+            <div class="w-10 h-10 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-sm text-primary-950 mb-1">Modifications de textes</h3>
+              <p class="text-xs text-slate-600">Suivi des modifications de textes susceptibles de vous concerner.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-100 shadow-sm">
+            <div class="w-10 h-10 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-sm text-primary-950 mb-1">Informations relatives aux équipements</h3>
+              <p class="text-xs text-slate-600">Informations structurées liées aux équipements que vous gérez.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-100 shadow-sm">
+            <div class="w-10 h-10 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-sm text-primary-950 mb-1">Échéances importantes</h3>
+              <p class="text-xs text-slate-600">Visibilité sur les échéances à surveiller pour vos équipements.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-100 shadow-sm">
+            <div class="w-10 h-10 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-sm text-primary-950 mb-1">Alertes & changements</h3>
+              <p class="text-xs text-slate-600">Signalement des changements à surveiller pour maintenir la conformité.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMENT ÇA MARCHE -->
+    <section id="fonctionnement" class="py-16 md:py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-2xl sm:text-3xl font-bold text-primary-950 mb-4">Comment ça marche ?</h2>
+          <p class="text-slate-600">Un parcours simple en quatre étapes pour exprimer votre besoin et recevoir une proposition adaptée.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="relative text-center">
+            <div class="w-14 h-14 mx-auto rounded-full bg-primary-600 text-white flex items-center justify-center text-xl font-bold shadow-lg mb-5">01</div>
+            <h3 class="font-semibold text-primary-950 mb-2">Présentez votre entreprise</h3>
+            <p class="text-sm text-slate-600">L’entreprise renseigne ses informations générales et son secteur d’activité.</p>
+          </div>
+          <div class="relative text-center">
+            <div class="w-14 h-14 mx-auto rounded-full bg-primary-600 text-white flex items-center justify-center text-xl font-bold shadow-lg mb-5">02</div>
+            <h3 class="font-semibold text-primary-950 mb-2">Décrivez vos équipements</h3>
+            <p class="text-sm text-slate-600">Elle indique son activité, les équipements utilisés et les caractéristiques utiles.</p>
+          </div>
+          <div class="relative text-center">
+            <div class="w-14 h-14 mx-auto rounded-full bg-primary-600 text-white flex items-center justify-center text-xl font-bold shadow-lg mb-5">03</div>
+            <h3 class="font-semibold text-primary-950 mb-2">Identifiez votre besoin</h3>
+            <p class="text-sm text-slate-600">Elle décrit son besoin ou les difficultés qu’elle rencontre en matière de veille.</p>
+          </div>
+          <div class="relative text-center">
+            <div class="w-14 h-14 mx-auto rounded-full bg-primary-600 text-white flex items-center justify-center text-xl font-bold shadow-lg mb-5">04</div>
+            <h3 class="font-semibold text-primary-950 mb-2">Recevez une proposition adaptée</h3>
+            <p class="text-sm text-slate-600">L’équipe étudie la demande et échange avec l’entreprise pour une offre pertinente.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OFFRES -->
+    <section id="offres" class="py-16 md:py-24 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="text-2xl sm:text-3xl font-bold text-primary-950 mb-4">Nos offres de veille réglementaire</h2>
+          <p class="text-slate-600">Des niveaux d’accompagnement adaptés. Les noms, prix et contenus définitifs restent à confirmer par le client.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+          <!-- OFFRE 1 -->
+          <div class="relative flex flex-col rounded-2xl border border-slate-200 bg-white p-6 lg:p-8 shadow-card hover:shadow-card-hover transition">
+            <div class="mb-5">
+              <h3 class="text-lg font-bold text-primary-950">[Nom à définir]</h3>
+              <p class="text-sm text-slate-500 mt-1">Une offre adaptée aux besoins essentiels de veille réglementaire.</p>
+            </div>
+            <div class="mb-6">
+              <span class="text-xl font-bold text-primary-950">[Tarif sur demande]</span>
+            </div>
+            <ul class="space-y-3 mb-8 flex-1">
+              <li class="flex items-start gap-2.5 text-sm text-slate-700">
+                <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                [Service inclus]
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-slate-700">
+                <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                [Service inclus]
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-slate-700">
+                <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                [Service inclus]
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-slate-700">
+                <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                [Niveau de suivi]
+              </li>
+            </ul>
+            <button onclick="selectOffer('offre1')" class="w-full py-3 px-4 text-sm font-semibold text-primary-700 bg-primary-50 hover:bg-primary-100 rounded-lg transition">
+              Découvrir cette offre
+            </button>
+          </div>
+
+          <!-- OFFRE 2 (mise en avant) -->
+          <div class="relative flex flex-col rounded-2xl border-2 border-primary-500 bg-white p-6 lg:p-8 shadow-card-hover">
+            <div class="absolute -top-3.5 left-1/2 -translate-x-1/2">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-primary-600 text-white shadow-sm">
+                Recommandée
+              </span>
+            </div>
+            <div class="mb-5 mt-1">
+              <h3 class="text-lg font-bold text-primary-950">[Nom à définir]</h3>
+              <p class="text-sm text-slate-500 mt-1">Une offre destinée aux entreprises ayant des besoins de suivi plus avancés.</p>
+            </div>
+            <div class="mb-6">
+              <span class="text-xl font-bold text-primary-950">[Tarif sur demande]</span>
+            </div>
+            <ul class="space-y-3 mb-8 flex-1">
+              <li class="flex items-start gap-2.5 text-sm text-slate-700">
+                <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                [Service inclus]
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-slate-700">
+                <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                [Service inclus]
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-slate-700">
+                <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                [Service inclus]
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-slate-700">
+                <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                [Niveau de suivi]
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-slate-700">
+                <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                [Accompagnement]
+              </li>
+            </ul>
+            <button onclick="selectOffer('offre2')" class="w-full py-3 px-4 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 rounded-lg shadow-sm transition">
+              Découvrir cette offre
+            </button>
+          </div>
+
+          <!-- OFFRE 3 -->
+          <div class="relative flex flex-col rounded-2xl border border-slate-200 bg-white p-6 lg:p-8 shadow-card hover:shadow-card-hover transition">
+            <div class="mb-5">
+              <h3 class="text-lg font-bold text-primary-950">[Nom à définir]</h3>
+              <p class="text-sm text-slate-500 mt-1">Une offre destinée aux besoins plus complets de veille et d’accompagnement.</p>
+            </div>
+            <div class="mb-6">
+              <span class="text-xl font-bold text-primary-950">[Tarif sur demande]</span>
+            </div>
+            <ul class="space-y-3 mb-8 flex-1">
+              <li class="flex items-start gap-2.5 text-sm text-slate-700">
+                <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                [Service inclus]
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-slate-700">
+                <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                [Service inclus]
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-slate-700">
+                <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                [Service inclus]
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-slate-700">
+                <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                [Niveau de suivi]
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-slate-700">
+                <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                [Accompagnement]
+              </li>
+            </ul>
+            <button onclick="selectOffer('offre3')" class="w-full py-3 px-4 text-sm font-semibold text-primary-700 bg-primary-50 hover:bg-primary-100 rounded-lg transition">
+              Découvrir cette offre
+            </button>
+          </div>
+        </div>
+
+        <!-- Tableau de comparaison -->
+        <div class="mt-14">
+          <h3 class="text-lg font-semibold text-primary-950 text-center mb-6">Comparaison des offres</h3>
+          <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
+            <table class="w-full text-sm text-left">
+              <thead class="bg-slate-100 text-slate-600">
+                <tr>
+                  <th class="px-5 py-3.5 font-medium">Fonctionnalité</th>
+                  <th class="px-5 py-3.5 font-medium text-center">Offre 1</th>
+                  <th class="px-5 py-3.5 font-medium text-center">Offre 2</th>
+                  <th class="px-5 py-3.5 font-medium text-center">Offre 3</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 bg-white">
+                <tr>
+                  <td class="px-5 py-3.5 text-slate-700">Veille réglementaire</td>
+                  <td class="px-5 py-3.5 text-center text-emerald-600 font-medium">✓</td>
+                  <td class="px-5 py-3.5 text-center text-emerald-600 font-medium">✓</td>
+                  <td class="px-5 py-3.5 text-center text-emerald-600 font-medium">✓</td>
+                </tr>
+                <tr>
+                  <td class="px-5 py-3.5 text-slate-700">Suivi des équipements</td>
+                  <td class="px-5 py-3.5 text-center text-emerald-600 font-medium">✓</td>
+                  <td class="px-5 py-3.5 text-center text-emerald-600 font-medium">✓</td>
+                  <td class="px-5 py-3.5 text-center text-emerald-600 font-medium">✓</td>
+                </tr>
+                <tr>
+                  <td class="px-5 py-3.5 text-slate-700">Niveau de suivi avancé</td>
+                  <td class="px-5 py-3.5 text-center text-slate-300">—</td>
+                  <td class="px-5 py-3.5 text-center text-emerald-600 font-medium">✓</td>
+                  <td class="px-5 py-3.5 text-center text-emerald-600 font-medium">✓</td>
+                </tr>
+                <tr>
+                  <td class="px-5 py-3.5 text-slate-700">Accompagnement</td>
+                  <td class="px-5 py-3.5 text-center text-slate-300">—</td>
+                  <td class="px-5 py-3.5 text-center text-emerald-600 font-medium">✓</td>
+                  <td class="px-5 py-3.5 text-center text-emerald-600 font-medium">✓</td>
+                </tr>
+                <tr>
+                  <td class="px-5 py-3.5 text-slate-700">[Service à définir]</td>
+                  <td class="px-5 py-3.5 text-center text-slate-300">—</td>
+                  <td class="px-5 py-3.5 text-center text-slate-300">—</td>
+                  <td class="px-5 py-3.5 text-center text-emerald-600 font-medium">✓</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-slate-400 text-center mt-3">Données illustratives — à personnaliser avec le client.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="py-16 md:py-20 bg-white border-t border-slate-200">
+      <div class="max-w-3xl mx-auto px-4 text-center">
+        <h2 class="text-2xl font-bold text-primary-950 mb-3">Une question sur la veille réglementaire ?</h2>
+        <p class="text-slate-600 mb-6">Contactez-nous pour échanger sur vos équipements et vos besoins de conformité.</p>
+        <div class="flex flex-wrap justify-center gap-6 text-sm text-slate-600">
+          <span class="inline-flex items-center gap-2">
+            <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            [Email]
+          </span>
+          <span class="inline-flex items-center gap-2">
+            <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+            [Téléphone]
+          </span>
+        </div>
+        <button onclick="showView('form')" class="mt-8 inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 rounded-lg shadow-sm transition">
+          Demander une présentation
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========== VIEW: DÉTAIL OFFRE ========== -->
+  <div id="view-detail" class="view">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <button onclick="showView('home'); scrollToSection('offres');" class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-primary-700 mb-8 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Retour aux offres
+      </button>
+
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-card p-6 sm:p-8 fade-in">
+        <div class="flex flex-wrap items-start justify-between gap-4 mb-6">
+          <div>
+            <h1 id="detail-name" class="text-2xl font-bold text-primary-950">[Nom à définir]</h1>
+            <p id="detail-desc" class="text-slate-500 mt-1">Description de l’offre.</p>
+          </div>
+          <div class="text-right">
+            <div class="text-lg font-bold text-primary-950">[Tarif sur demande]</div>
+          </div>
+        </div>
+
+        <div class="space-y-6 border-t border-slate-100 pt-6 mb-8">
+          <div>
+            <h3 class="font-semibold text-primary-950 mb-2 text-sm uppercase tracking-wide">Besoin auquel l’offre répond</h3>
+            <p id="detail-need" class="text-sm text-slate-600">[À définir avec le client]</p>
+          </div>
+          <div>
+            <h3 class="font-semibold text-primary-950 mb-2 text-sm uppercase tracking-wide">Équipements concernés</h3>
+            <p id="detail-equip" class="text-sm text-slate-600">Selon le périmètre défini avec le client.</p>
+          </div>
+          <div>
+            <h3 class="font-semibold text-primary-950 mb-3 text-sm uppercase tracking-wide">Services inclus</h3>
+            <ul id="detail-services" class="space-y-2.5">
+              <!-- filled by JS -->
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold text-primary-950 mb-2 text-sm uppercase tracking-wide">Niveau de suivi & fréquence</h3>
+            <p id="detail-level" class="text-sm text-slate-600">[Niveau et mode de suivi à définir]</p>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-4 text-sm text-slate-600">
+            <p><strong>Conditions :</strong> Les informations présentées sont des placeholders. Aucun contenu réglementaire définitif n’est fourni à ce stade. Les offres restent à confirmer par le client.</p>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button onclick="goToForm()" class="flex-1 py-3 px-5 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 rounded-lg shadow-sm transition">
+            Demander cette offre
+          </button>
+          <button onclick="showView('home'); scrollToSection('offres');" class="flex-1 py-3 px-5 text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition">
+            Retour aux offres
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== VIEW: FORMULAIRE ========== -->
+  <div id="view-form" class="view">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <button onclick="showView('home');" class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-primary-700 mb-6 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Retour
+      </button>
+
+      <div class="text-center mb-8">
+        <h1 class="text-2xl font-bold text-primary-950 mb-2">Parlez-nous de votre entreprise</h1>
+        <p class="text-slate-600 text-sm max-w-md mx-auto">Ces informations nous permettront de mieux comprendre votre activité, vos équipements et votre besoin de veille réglementaire.</p>
+      </div>
+
+      <form id="company-form" onsubmit="submitForm(event)" class="bg-white rounded-2xl border border-slate-200 shadow-card p-6 sm:p-8 space-y-8 fade-in">
+
+        <!-- Section A -->
+        <div>
+          <h2 class="text-sm font-semibold text-primary-700 uppercase tracking-wide mb-4 pb-2 border-b border-slate-100">A — Informations sur l’entreprise</h2>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">Nom de l’entreprise <span class="text-red-500">*</span></label>
+              <input type="text" required placeholder="Nom de votre société" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">Secteur / domaine d’activité <span class="text-red-500">*</span></label>
+              <input type="text" required placeholder="Ex. Industrie, Énergie, Bâtiment…" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">Localisation <span class="text-red-500">*</span></label>
+              <input type="text" required placeholder="Ville, pays" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition" />
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1.5">Adresse e-mail <span class="text-red-500">*</span></label>
+                <input type="email" required placeholder="contact@entreprise.com" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1.5">Numéro de téléphone <span class="text-red-500">*</span></label>
+                <input type="tel" required placeholder="+221 …" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section B -->
+        <div>
+          <h2 class="text-sm font-semibold text-primary-700 uppercase tracking-wide mb-4 pb-2 border-b border-slate-100">B — Responsable</h2>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">Nom et prénom <span class="text-red-500">*</span></label>
+              <input type="text" required placeholder="Prénom Nom" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">Fonction <span class="text-red-500">*</span></label>
+              <input type="text" required placeholder="Ex. Responsable qualité, Dirigeant…" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Section C -->
+        <div>
+          <h2 class="text-sm font-semibold text-primary-700 uppercase tracking-wide mb-4 pb-2 border-b border-slate-100">C — Activité et équipements</h2>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">Description de l’activité <span class="text-red-500">*</span></label>
+              <textarea required rows="3" placeholder="Décrivez brièvement votre activité…" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition resize-none"></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">Type d’équipements utilisés <span class="text-red-500">*</span></label>
+              <textarea required rows="2" placeholder="Ex. équipements industriels, électriques, de sécurité…" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition resize-none"></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">Nombre approximatif d’équipements</label>
+              <input type="text" placeholder="Ex. 10–50, plus de 100…" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">Informations complémentaires</label>
+              <textarea rows="2" placeholder="Toute information utile…" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition resize-none"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section D -->
+        <div>
+          <h2 class="text-sm font-semibold text-primary-700 uppercase tracking-wide mb-4 pb-2 border-b border-slate-100">D — Besoin</h2>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">Quel est votre besoin ?</label>
+              <textarea rows="2" placeholder="Décrivez votre besoin de veille réglementaire…" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition resize-none"></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">Quelle difficulté rencontrez-vous ?</label>
+              <textarea rows="2" placeholder="Ex. manque de visibilité, sources dispersées…" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm transition resize-none"></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">Offre sélectionnée</label>
+              <input type="text" id="form-offer" readonly class="w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-600 text-sm" value="Aucune offre sélectionnée" />
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="w-full py-3.5 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 rounded-lg shadow-sm transition">
+            Envoyer ma demande
+          </button>
+          <p class="text-xs text-slate-400 text-center mt-3">Simulation uniquement — aucune donnée n’est enregistrée ni transmise.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========== VIEW: CONFIRMATION ========== -->
+  <div id="view-confirm" class="view">
+    <div class="max-w-lg mx-auto px-4 py-16 md:py-24 text-center fade-in">
+      <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-emerald-100 flex items-center justify-center">
+        <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <h1 class="text-2xl font-bold text-primary-950 mb-3">Votre demande a bien été prise en compte</h1>
+      <p class="text-slate-600 mb-4 leading-relaxed">
+        Merci pour votre intérêt. Notre équipe reviendra vers vous pour échanger sur votre besoin.
+      </p>
+      <p class="text-xs text-slate-400 mb-8">
+        Ceci est une démonstration de la maquette. Aucune donnée n’est réellement transmise.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <button onclick="showView('home')" class="px-6 py-3 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition">
+          Retour à l’accueil
+        </button>
+        <button onclick="showView('home'); setTimeout(() => scrollToSection('offres'), 100);" class="px-6 py-3 text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition">
+          Découvrir les offres
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-primary-950 text-primary-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-8 h-8 rounded-lg bg-primary-700 flex items-center justify-center">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <span class="font-bold text-white">[NOM DE LA PLATEFORME]</span>
+          </div>
+          <p class="text-sm text-primary-300 leading-relaxed">Plateforme de veille réglementaire pour les équipements.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-3 text-sm">Navigation</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" onclick="showView('home'); return false;" class="hover:text-white transition">Accueil</a></li>
+            <li><a href="#" onclick="showView('home'); scrollToSection('solution'); return false;" class="hover:text-white transition">Notre solution</a></li>
+            <li><a href="#" onclick="showView('home'); scrollToSection('offres'); return false;" class="hover:text-white transition">Offres</a></li>
+            <li><a href="#" onclick="showView('home'); scrollToSection('fonctionnement'); return false;" class="hover:text-white transition">Fonctionnement</a></li>
+            <li><a href="#" onclick="showView('home'); scrollToSection('contact'); return false;" class="hover:text-white transition">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-3 text-sm">Contact</h4>
+          <ul class="space-y-2 text-sm text-primary-300">
+            <li>Email : [Email]</li>
+            <li>Téléphone : [Téléphone]</li>
+            <li>Adresse : [Adresse]</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-3 text-sm">À propos</h4>
+          <p class="text-sm text-primary-300">Maquette de présentation et de validation du concept. Réalisée par <strong class="text-white">GEEKDEV</strong>.</p>
+        </div>
+      </div>
+      <div class="border-t border-primary-800 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-primary-400">
+        <p>© 2026 [Nom de la plateforme] — Tous droits réservés.</p>
+        <p>Maquette réalisée par <span class="text-primary-200">GEEKDEV</span> · 25 septembre 2026</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== SCRIPT ==================== -->
+  <script>
+    const offers = {
+      offre1: {
+        name: '[Nom à définir] — Offre 1',
+        desc: 'Une offre adaptée aux besoins essentiels de veille réglementaire.',
+        need: 'Répondre aux besoins fondamentaux de suivi réglementaire pour les équipements.',
+        equip: 'Selon le périmètre défini avec le client.',
+        services: ['[Service inclus]', '[Service inclus]', '[Service inclus]', '[Niveau de suivi]'],
+        level: '[Niveau de suivi à définir]'
+      },
+      offre2: {
+        name: '[Nom à définir] — Offre 2',
+        desc: 'Une offre destinée aux entreprises ayant des besoins de suivi plus avancés.',
+        need: 'Apporter un niveau de suivi plus poussé et un accompagnement adapté.',
+        equip: 'Selon le périmètre défini avec le client.',
+        services: ['[Service inclus]', '[Service inclus]', '[Service inclus]', '[Niveau de suivi]', '[Accompagnement]'],
+        level: '[Niveau de suivi avancé — fréquence à définir]'
+      },
+      offre3: {
+        name: '[Nom à définir] — Offre 3',
+        desc: 'Une offre destinée aux besoins plus complets de veille et d’accompagnement.',
+        need: 'Couvrir les besoins les plus complets en matière de veille et d’accompagnement.',
+        equip: 'Selon le périmètre défini avec le client.',
+        services: ['[Service inclus]', '[Service inclus]', '[Service inclus]', '[Niveau de suivi]', '[Accompagnement]'],
+        level: '[Niveau de suivi complet — mode à définir]'
+      }
+    };
+
+    let selectedOfferKey = null;
+
+    function showView(viewId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      const view = document.getElementById('view-' + viewId);
+      if (view) {
+        view.classList.add('active');
+        view.classList.add('fade-in');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      closeMobile();
+    }
+
+    function scrollToSection(id) {
+      showView('home');
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+
+    function closeMobile() {
+      document.getElementById('mobile-menu').classList.add('hidden');
+    }
+
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    function selectOffer(key) {
+      selectedOfferKey = key;
+      const o = offers[key];
+      document.getElementById('detail-name').textContent = o.name;
+      document.getElementById('detail-desc').textContent = o.desc;
+      document.getElementById('detail-need').textContent = o.need;
+      document.getElementById('detail-equip').textContent = o.equip;
+      document.getElementById('detail-level').textContent = o.level;
+      document.getElementById('detail-services').innerHTML = o.services.map(s => `
+        <li class="flex items-start gap-2.5 text-sm text-slate-700">
+          <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          ${s}
+        </li>
+      `).join('');
+      showView('detail');
+    }
+
+    function goToForm() {
+      const offerLabel = selectedOfferKey ? offers[selectedOfferKey].name : 'Aucune offre sélectionnée';
+      document.getElementById('form-offer').value = offerLabel;
+      showView('form');
+    }
+
+    function submitForm(e) {
+      e.preventDefault();
+      showView('confirm');
+    }
+  </script>
+</body>
+</html>
